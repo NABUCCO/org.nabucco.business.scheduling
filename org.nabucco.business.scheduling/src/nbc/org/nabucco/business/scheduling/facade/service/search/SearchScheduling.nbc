@@ -1,0 +1,46 @@
+/*
+* Copyright 2011 PRODYNA AG
+*
+* Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.opensource.org/licenses/eclipse-1.0.php or
+* http://nabuccosource.org/License.html
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+package org.nabucco.business.scheduling.facade.service.search;
+
+import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
+import org.nabucco.business.scheduling.facade.message.StaffingListMsg;
+import org.nabucco.business.scheduling.facade.message.search.SchedulingSearchRq;
+import org.nabucco.business.scheduling.facade.message.search.StaffingSearchRq;
+import org.nabucco.framework.base.facade.exception.service.SearchException;
+
+@Author				Nicolas Moser
+@Company			PRODYNA AG
+@Date				2011-08-23
+@Version			1.0
+@Description		Service for searching schedulings.
+public Service SearchScheduling {
+
+	@JoinPoint				org.nabucco.aspect.resolving
+	@Description			Searches schedulings for the given request parameter.
+	@ManualImplementation
+	public SchedulingListMsg searchScheduling(SchedulingSearchRq rq) throws SearchException;
+
+	@JoinPoint				org.nabucco.aspect.resolving
+	@Description			Searches staffings for the given request parameter.
+	@ManualImplementation
+	public StaffingListMsg searchStaffing(StaffingSearchRq rq) throws SearchException;
+
+	
+}
+
+
+

@@ -1,0 +1,106 @@
+/*
+* Copyright 2011 PRODYNA AG
+*
+* Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.opensource.org/licenses/eclipse-1.0.php or
+* http://nabuccosource.org/License.html
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+package org.nabucco.business.scheduling.facade.datatype;
+
+import org.nabucco.business.scheduling.facade.datatype.SchedulingStatus;
+import org.nabucco.business.scheduling.facade.datatype.Staffing;
+import org.nabucco.framework.base.facade.datatype.MultiTenantDatatype;
+import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.framework.base.facade.datatype.Owner;
+import org.nabucco.framework.base.facade.datatype.Percentage;
+import org.nabucco.framework.base.facade.datatype.business.OfferNumber;
+import org.nabucco.framework.base.facade.datatype.business.PersonDays;
+import org.nabucco.framework.base.facade.datatype.code.Code;
+import org.nabucco.framework.base.facade.datatype.date.Date;
+import org.nabucco.framework.base.facade.datatype.documentation.Comment;
+
+@Author				Nicolas Moser
+@Company			PRODYNA AG
+@Date				2011-08-23
+@Version			1.0
+@Description		Holds schedules of specific customer requests.
+public Datatype Scheduling extends MultiTenantDatatype {
+
+	@Description		The name of the scheduling.
+	private Basetype Name[1] name;
+
+	@Description		The description of the scheduling.
+	private Basetype Comment[1] description;
+	
+	@Default			CREATED
+	@Description		The scheduling status.
+	private Enumeration SchedulingStatus[1] status; 
+	
+	@Description		The owner of the scheduling.
+	private Basetype Owner[1] owner;
+
+	@Description		The starting date of this scheduling.
+	private Basetype Date[1] startDate;
+
+	@Description		The end date of this scheduling.
+	private Basetype Date[0..1] endDate;
+
+	@Description		The due date of this scheduling.
+	private Basetype Date[1] dueDate;
+
+	@Description		Number of the related offer.
+	private Basetype OfferNumber[0..1] offerNumber;
+
+	@CodePath			nabucco.business.scheduling.workload
+	@Description		The load of work planned for this scheduling.
+	private Datatype Code[1] workLoad;
+
+	@CodePath			nabucco.business.scheduling.type
+	@Description		The type this scheduling.
+	private Datatype Code[1] schedulingType;
+	
+	@CodePath			nabucco.business.scheduling.feasability
+	@Description		The feasability of success.
+	private Datatype  Code[1] feasability;
+
+	@Description		The amount of person days for of this scheduling.
+	private Basetype PersonDays[1] volume;
+	
+	@CodePath			nabucco.business.organization.sector
+	@Description		The corporate division.
+	private Datatype Code[0..1] corporateDivision;
+	
+	@Description		The percent project that take place by the customer
+	private Basetype Percentage[1] onsite;
+	
+	@CodePath			nabucco.business.scheduling.offerstate
+	@Description		The state of the offer
+	private Datatype Code[0..1] offerState;
+	
+	@Description		The priority of this scheduling.
+	@CodePath			nabucco.business.scheduling.priority
+	private Datatype Code[1] priority;
+	
+	@Description		Role in the selected project.
+	@CodePath			nabucco.business.project.projectposition.role
+	private Datatype Code[1] projectRole;
+	
+	@Description		Name of the creator of the scheduling.
+	private Basetype Name[0..1] creator;
+	
+	@Description		The personal staffing of a scheduling.
+	private Datatype Staffing[0..*] staffList;
+	
+}
+
+
+

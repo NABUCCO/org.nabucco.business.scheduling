@@ -26,7 +26,7 @@ import org.nabucco.framework.base.facade.datatype.business.OfferNumber;
 import org.nabucco.framework.base.facade.datatype.business.PersonDays;
 import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.base.facade.datatype.date.Date;
-import org.nabucco.framework.base.facade.datatype.documentation.Comment;
+import org.nabucco.framework.base.facade.datatype.text.LongDescription;
 
 @Author				Nicolas Moser
 @Company			PRODYNA AG
@@ -39,7 +39,7 @@ public Datatype Scheduling extends MultiTenantDatatype {
 	private Basetype Name[1] name;
 
 	@Description		The description of the scheduling.
-	private Basetype Comment[1] description;
+	private Basetype LongDescription[1] description;
 	
 	@Default			CREATED
 	@Description		The scheduling status.

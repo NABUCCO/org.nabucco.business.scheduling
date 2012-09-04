@@ -17,7 +17,9 @@
 package org.nabucco.business.scheduling.facade.service.search;
 
 import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
+import org.nabucco.business.scheduling.facade.message.SchedulingMsg;
 import org.nabucco.business.scheduling.facade.message.StaffingListMsg;
+import org.nabucco.business.scheduling.facade.message.search.SchedulingByStaffingSearchRq;
 import org.nabucco.business.scheduling.facade.message.search.SchedulingSearchRq;
 import org.nabucco.business.scheduling.facade.message.search.StaffingSearchRq;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
@@ -33,6 +35,14 @@ public Service SearchScheduling {
 	@Description			Searches schedulings for the given request parameter.
 	@ManualImplementation
 	public SchedulingListMsg searchScheduling(SchedulingSearchRq rq) throws SearchException;
+	
+	
+	@JoinPoint				org.nabucco.aspect.resolving
+	@Description			Searches scheduling that references the staffing with given id
+	@ManualImplementation
+	public SchedulingMsg searchSchedulingByStaffing(SchedulingByStaffingSearchRq rq) throws SearchException;
+	
+	
 
 	@JoinPoint				org.nabucco.aspect.resolving
 	@Description			Searches staffings for the given request parameter.

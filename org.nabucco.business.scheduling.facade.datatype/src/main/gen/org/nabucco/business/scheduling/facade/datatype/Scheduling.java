@@ -1,18 +1,16 @@
 /*
  * Copyright 2012 PRODYNA AG
- *
- * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
  * http://www.opensource.org/licenses/eclipse-1.0.php or
  * http://www.nabucco.org/License.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.business.scheduling.facade.datatype;
 
@@ -35,13 +33,13 @@ import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionSt
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoListImpl;
 import org.nabucco.framework.base.facade.datatype.date.Date;
-import org.nabucco.framework.base.facade.datatype.documentation.Comment;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
 import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
 import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
 import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
+import org.nabucco.framework.base.facade.datatype.text.LongDescription;
 
 /**
  * Scheduling<p/>Holds schedules of specific customer requests.<p/>
@@ -55,7 +53,7 @@ public class Scheduling extends MultiTenantDatatype implements Datatype {
 
     private static final SchedulingStatus STATUS_DEFAULT = SchedulingStatus.CREATED;
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;u0,n;m1,1;", "l0,100000;u0,n;m1,1;", "m1,1;",
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;u0,n;m1,1;", "l0,4000;u0,n;m1,1;", "m1,1;",
             "l3,12;u0,n;m1,1;", "l0,n;u0,n;m1,1;", "l0,n;u0,n;m0,1;", "l0,n;u0,n;m1,1;", "l1,n;u0,n;m0,1;", "m1,1;",
             "m1,1;", "m1,1;", "l0,n;u0,n;m1,1;", "m0,1;", "l0,n;u0,100;m1,1;", "m0,1;", "m1,1;", "m1,1;",
             "l0,255;u0,n;m0,1;", "m0,n;" };
@@ -102,7 +100,7 @@ public class Scheduling extends MultiTenantDatatype implements Datatype {
     private Name name;
 
     /** The description of the scheduling. */
-    private Comment description;
+    private LongDescription description;
 
     /** The scheduling status. */
     private SchedulingStatus status;
@@ -313,9 +311,8 @@ public class Scheduling extends MultiTenantDatatype implements Datatype {
         propertyMap.putAll(PropertyCache.getInstance().retrieve(MultiTenantDatatype.class).getPropertyMap());
         propertyMap.put(NAME,
                 PropertyDescriptorSupport.createBasetype(NAME, Name.class, 4, PROPERTY_CONSTRAINTS[0], false));
-        propertyMap
-                .put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION, Comment.class, 5,
-                        PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION, LongDescription.class, 5,
+                PROPERTY_CONSTRAINTS[1], false));
         propertyMap.put(STATUS, PropertyDescriptorSupport.createEnumeration(STATUS, SchedulingStatus.class, 6,
                 PROPERTY_CONSTRAINTS[2], false));
         propertyMap.put(OWNER,
@@ -401,8 +398,8 @@ public class Scheduling extends MultiTenantDatatype implements Datatype {
         if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
             this.setName(((Name) property.getInstance()));
             return true;
-        } else if ((property.getName().equals(DESCRIPTION) && (property.getType() == Comment.class))) {
-            this.setDescription(((Comment) property.getInstance()));
+        } else if ((property.getName().equals(DESCRIPTION) && (property.getType() == LongDescription.class))) {
+            this.setDescription(((LongDescription) property.getInstance()));
             return true;
         } else if ((property.getName().equals(STATUS) && (property.getType() == SchedulingStatus.class))) {
             this.setStatus(((SchedulingStatus) property.getInstance()));
@@ -678,18 +675,18 @@ public class Scheduling extends MultiTenantDatatype implements Datatype {
     /**
      * The description of the scheduling.
      *
-     * @return the Comment.
+     * @return the LongDescription.
      */
-    public Comment getDescription() {
+    public LongDescription getDescription() {
         return this.description;
     }
 
     /**
      * The description of the scheduling.
      *
-     * @param description the Comment.
+     * @param description the LongDescription.
      */
-    public void setDescription(Comment description) {
+    public void setDescription(LongDescription description) {
         this.description = description;
     }
 
@@ -703,7 +700,7 @@ public class Scheduling extends MultiTenantDatatype implements Datatype {
             if ((description == null)) {
                 return;
             }
-            this.description = new Comment();
+            this.description = new LongDescription();
         }
         this.description.setValue(description);
     }

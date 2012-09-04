@@ -37,6 +37,7 @@ public Service ProduceScheduling {
 
 	@ManualImplementation
 	@JoinPoint				org.nabucco.aspect.initializing
+	@JoinPoint				org.nabucco.aspect.constraining
 	@Description			Creates a list of new staffing instances.
 	public StaffingListMsg produceStaffings(StaffingPrototypeRq rq) throws ProduceException;
 	

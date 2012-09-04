@@ -40,7 +40,13 @@ public Datatype Staffing extends MultiTenantDatatype {
 	private Enumeration StaffingStatus[1] status;
 	
 	@Description		Date of the customer interview.
-	private Basetype Date[0..1] interviewDate; 
+	private Basetype Date[0..1] interviewDate;
+	
+	@Description		The earliest possible start date
+	private Basetype Date[0..1] possibleStartDate; 
+	
+	@Description		The project end date
+	private Basetype Date[0..1] projectEndDate; 
 }
 
 

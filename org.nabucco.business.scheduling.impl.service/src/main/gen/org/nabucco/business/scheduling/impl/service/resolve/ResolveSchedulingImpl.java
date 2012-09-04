@@ -1,18 +1,16 @@
 /*
  * Copyright 2012 PRODYNA AG
- *
- * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
  * http://www.opensource.org/licenses/eclipse-1.0.php or
  * http://www.nabucco.org/License.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.business.scheduling.impl.service.resolve;
 
@@ -85,9 +83,11 @@ public class ResolveSchedulingImpl extends ServiceSupport implements ResolveSche
         if ((ASPECTS == null)) {
             ASPECTS = new HashMap<String, String[]>();
             ASPECTS.put("resolveScheduling", new String[] { "org.nabucco.aspect.resolving",
-                    "org.nabucco.aspect.transitioning", "org.nabucco.aspect.constraining" });
+                    "org.nabucco.aspect.transitioning", "org.nabucco.aspect.constraining",
+                    "org.nabucco.aspect.historization" });
             ASPECTS.put("resolveStaffing", new String[] { "org.nabucco.aspect.resolving",
-                    "org.nabucco.aspect.transitioning" });
+                    "org.nabucco.aspect.transitioning", "org.nabucco.aspect.constraining",
+                    "org.nabucco.aspect.historization" });
         }
         String[] aspects = ASPECTS.get(operationName);
         if ((aspects == null)) {

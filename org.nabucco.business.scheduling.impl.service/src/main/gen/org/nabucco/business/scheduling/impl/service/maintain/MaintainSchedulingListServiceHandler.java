@@ -12,12 +12,11 @@
  * either express or implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package org.nabucco.business.scheduling.impl.service.produce;
+package org.nabucco.business.scheduling.impl.service.maintain;
 
-import org.nabucco.business.scheduling.facade.message.SchedulingMsg;
-import org.nabucco.business.scheduling.facade.message.produce.SchedulingPrototypeRq;
+import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
 import org.nabucco.framework.base.facade.exception.NabuccoException;
-import org.nabucco.framework.base.facade.exception.service.ProduceException;
+import org.nabucco.framework.base.facade.exception.service.MaintainException;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
 import org.nabucco.framework.base.impl.service.ServiceHandler;
@@ -25,66 +24,66 @@ import org.nabucco.framework.base.impl.service.maintain.PersistenceServiceHandle
 import org.nabucco.framework.base.impl.service.maintain.PersistenceServiceHandlerSupport;
 
 /**
- * ProduceSchedulingServiceHandler<p/>Service for producing schedulings.<p/>
+ * MaintainSchedulingListServiceHandler<p/>Service for maintaining scheduling datatypes.<p/>
  *
  * @version 1.0
- * @author Nicolas Moser, PRODYNA AG, 2011-08-23
+ * @author Nicolas Moser, PRODYNA AG, 2011-10-04
  */
-public abstract class ProduceSchedulingServiceHandler extends PersistenceServiceHandlerSupport implements
+public abstract class MaintainSchedulingListServiceHandler extends PersistenceServiceHandlerSupport implements
         ServiceHandler, PersistenceServiceHandler {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID = "org.nabucco.business.scheduling.impl.service.produce.ProduceSchedulingServiceHandler";
+    private static final String ID = "org.nabucco.business.scheduling.impl.service.maintain.MaintainSchedulingListServiceHandler";
 
-    /** Constructs a new ProduceSchedulingServiceHandler instance. */
-    public ProduceSchedulingServiceHandler() {
+    /** Constructs a new MaintainSchedulingListServiceHandler instance. */
+    public MaintainSchedulingListServiceHandler() {
         super();
     }
 
     /**
      * Invokes the service handler method.
      *
-     * @param rq the ServiceRequest<SchedulingPrototypeRq>.
-     * @return the ServiceResponse<SchedulingMsg>.
-     * @throws ProduceException
+     * @param rq the ServiceRequest<SchedulingListMsg>.
+     * @return the ServiceResponse<SchedulingListMsg>.
+     * @throws MaintainException
      */
-    protected ServiceResponse<SchedulingMsg> invoke(ServiceRequest<SchedulingPrototypeRq> rq) throws ProduceException {
-        ServiceResponse<SchedulingMsg> rs;
-        SchedulingMsg msg;
+    protected ServiceResponse<SchedulingListMsg> invoke(ServiceRequest<SchedulingListMsg> rq) throws MaintainException {
+        ServiceResponse<SchedulingListMsg> rs;
+        SchedulingListMsg msg;
         try {
             this.validateRequest(rq);
             this.setContext(rq.getContext());
-            msg = this.produceScheduling(rq.getRequestMessage());
+            msg = this.maintainSchedulingList(rq.getRequestMessage());
             if ((msg == null)) {
                 super.getLogger().warning("No response message defined.");
             } else {
                 super.cleanServiceMessage(msg);
             }
-            rs = new ServiceResponse<SchedulingMsg>(rq.getContext());
+            rs = new ServiceResponse<SchedulingListMsg>(rq.getContext());
             rs.setResponseMessage(msg);
             return rs;
-        } catch (ProduceException e) {
+        } catch (MaintainException e) {
             super.getLogger().error(e);
             throw e;
         } catch (NabuccoException e) {
             super.getLogger().error(e);
-            ProduceException wrappedException = new ProduceException(e);
+            MaintainException wrappedException = new MaintainException(e);
             throw wrappedException;
         } catch (Exception e) {
             super.getLogger().error(e);
-            throw new ProduceException("Error during service invocation.", e);
+            throw new MaintainException("Error during service invocation.", e);
         }
     }
 
     /**
-     * Creates a new scheduling instance.
+     * Maintains a list of schedulings.
      *
-     * @param msg the SchedulingPrototypeRq.
-     * @return the SchedulingMsg.
-     * @throws ProduceException
+     * @param msg the SchedulingListMsg.
+     * @return the SchedulingListMsg.
+     * @throws MaintainException
      */
-    protected abstract SchedulingMsg produceScheduling(SchedulingPrototypeRq msg) throws ProduceException;
+    protected abstract SchedulingListMsg maintainSchedulingList(SchedulingListMsg msg) throws MaintainException;
 
     /**
      * Getter for the Id.

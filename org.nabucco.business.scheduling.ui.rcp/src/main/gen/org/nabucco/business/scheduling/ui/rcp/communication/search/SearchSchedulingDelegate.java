@@ -1,23 +1,23 @@
 /*
  * Copyright 2012 PRODYNA AG
- *
- * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
  * http://www.opensource.org/licenses/eclipse-1.0.php or
  * http://www.nabucco.org/License.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.business.scheduling.ui.rcp.communication.search;
 
 import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
+import org.nabucco.business.scheduling.facade.message.SchedulingMsg;
 import org.nabucco.business.scheduling.facade.message.StaffingListMsg;
+import org.nabucco.business.scheduling.facade.message.search.SchedulingByStaffingSearchRq;
 import org.nabucco.business.scheduling.facade.message.search.SchedulingSearchRq;
 import org.nabucco.business.scheduling.facade.message.search.StaffingSearchRq;
 import org.nabucco.business.scheduling.facade.service.search.SearchScheduling;
@@ -81,6 +81,41 @@ public class SearchSchedulingDelegate extends ServiceDelegateSupport {
             }
         }
         throw new ClientException("Cannot execute service operation: SearchScheduling.searchScheduling");
+    }
+
+    /**
+     * SearchSchedulingByStaffing.
+     *
+     * @param subContexts the ServiceSubContext....
+     * @param message the SchedulingByStaffingSearchRq.
+     * @return the SchedulingMsg.
+     * @throws ClientException
+     */
+    public SchedulingMsg searchSchedulingByStaffing(SchedulingByStaffingSearchRq message,
+            ServiceSubContext... subContexts) throws ClientException {
+        ServiceRequest<SchedulingByStaffingSearchRq> request = new ServiceRequest<SchedulingByStaffingSearchRq>(
+                super.createServiceContext(subContexts));
+        request.setRequestMessage(message);
+        ServiceResponse<SchedulingMsg> response = null;
+        Exception exception = null;
+        if ((service != null)) {
+            super.handleRequest(request);
+            long start = NabuccoSystem.getCurrentTimeMillis();
+            try {
+                response = service.searchSchedulingByStaffing(request);
+            } catch (Exception e) {
+                exception = e;
+            } finally {
+                long end = NabuccoSystem.getCurrentTimeMillis();
+                long duration = (end - start);
+                super.monitorResult(SearchScheduling.class, "searchSchedulingByStaffing", duration, exception);
+            }
+            if ((response != null)) {
+                super.handleResponse(response);
+                return response.getResponseMessage();
+            }
+        }
+        throw new ClientException("Cannot execute service operation: SearchScheduling.searchSchedulingByStaffing");
     }
 
     /**

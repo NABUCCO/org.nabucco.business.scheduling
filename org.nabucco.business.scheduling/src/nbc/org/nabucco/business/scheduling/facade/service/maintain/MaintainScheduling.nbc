@@ -16,6 +16,7 @@
 */
 package org.nabucco.business.scheduling.facade.service.maintain;
 
+import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
 import org.nabucco.business.scheduling.facade.message.SchedulingMsg;
 import org.nabucco.business.scheduling.facade.message.StaffingMsg;
 import org.nabucco.framework.base.facade.exception.service.MaintainException;
@@ -33,14 +34,28 @@ public Service MaintainScheduling {
 	@JoinPoint				org.nabucco.aspect.resolving
 	@JoinPoint				org.nabucco.aspect.indexing
 	@JoinPoint				org.nabucco.aspect.constraining
+	@JoinPoint				org.nabucco.aspect.historization
 	@Description			Maintains a single scheduling.
 	@ManualImplementation
 	public SchedulingMsg maintainScheduling(SchedulingMsg msg) throws MaintainException;
+	
+	@JoinPoint				org.nabucco.aspect.validating
+	@JoinPoint				org.nabucco.aspect.transitioning
+	@JoinPoint				org.nabucco.aspect.relating
+	@JoinPoint				org.nabucco.aspect.resolving
+	@JoinPoint				org.nabucco.aspect.indexing
+	@JoinPoint				org.nabucco.aspect.constraining
+	@JoinPoint				org.nabucco.aspect.historization
+	@Description			Maintains a list of schedulings.
+	@ManualImplementation
+	public SchedulingListMsg maintainSchedulingList(SchedulingListMsg msg) throws MaintainException;
 
 	@JoinPoint				org.nabucco.aspect.validating
 	@JoinPoint				org.nabucco.aspect.transitioning
 	@JoinPoint				org.nabucco.aspect.relating
 	@JoinPoint				org.nabucco.aspect.resolving
+	@JoinPoint				org.nabucco.aspect.constraining
+	@JoinPoint				org.nabucco.aspect.historization
 	@Description			Maintains a single staffing.
 	@ManualImplementation
 	public StaffingMsg maintainStaffing(StaffingMsg msg) throws MaintainException;

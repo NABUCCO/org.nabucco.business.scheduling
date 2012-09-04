@@ -1,18 +1,16 @@
 /*
  * Copyright 2012 PRODYNA AG
- *
- * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
  * http://www.opensource.org/licenses/eclipse-1.0.php or
  * http://www.nabucco.org/License.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.business.scheduling.impl.service.maintain;
 
@@ -20,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
 import org.nabucco.business.scheduling.facade.message.SchedulingMsg;
 import org.nabucco.business.scheduling.facade.message.StaffingMsg;
 import org.nabucco.business.scheduling.facade.service.maintain.MaintainScheduling;
@@ -48,6 +47,8 @@ public class MaintainSchedulingImpl extends ServiceSupport implements MaintainSc
 
     private MaintainSchedulingServiceHandler maintainSchedulingServiceHandler;
 
+    private MaintainSchedulingListServiceHandler maintainSchedulingListServiceHandler;
+
     private MaintainStaffingServiceHandler maintainStaffingServiceHandler;
 
     private EntityManager entityManager;
@@ -68,6 +69,11 @@ public class MaintainSchedulingImpl extends ServiceSupport implements MaintainSc
             this.maintainSchedulingServiceHandler.setPersistenceManager(persistenceManager);
             this.maintainSchedulingServiceHandler.setLogger(super.getLogger());
         }
+        this.maintainSchedulingListServiceHandler = injector.inject(MaintainSchedulingListServiceHandler.getId());
+        if ((this.maintainSchedulingListServiceHandler != null)) {
+            this.maintainSchedulingListServiceHandler.setPersistenceManager(persistenceManager);
+            this.maintainSchedulingListServiceHandler.setLogger(super.getLogger());
+        }
         this.maintainStaffingServiceHandler = injector.inject(MaintainStaffingServiceHandler.getId());
         if ((this.maintainStaffingServiceHandler != null)) {
             this.maintainStaffingServiceHandler.setPersistenceManager(persistenceManager);
@@ -86,9 +92,15 @@ public class MaintainSchedulingImpl extends ServiceSupport implements MaintainSc
             ASPECTS = new HashMap<String, String[]>();
             ASPECTS.put("maintainScheduling", new String[] { "org.nabucco.aspect.validating",
                     "org.nabucco.aspect.transitioning", "org.nabucco.aspect.relating", "org.nabucco.aspect.resolving",
-                    "org.nabucco.aspect.indexing", "org.nabucco.aspect.constraining" });
+                    "org.nabucco.aspect.indexing", "org.nabucco.aspect.constraining",
+                    "org.nabucco.aspect.historization" });
+            ASPECTS.put("maintainSchedulingList", new String[] { "org.nabucco.aspect.validating",
+                    "org.nabucco.aspect.transitioning", "org.nabucco.aspect.relating", "org.nabucco.aspect.resolving",
+                    "org.nabucco.aspect.indexing", "org.nabucco.aspect.constraining",
+                    "org.nabucco.aspect.historization" });
             ASPECTS.put("maintainStaffing", new String[] { "org.nabucco.aspect.validating",
-                    "org.nabucco.aspect.transitioning", "org.nabucco.aspect.relating", "org.nabucco.aspect.resolving" });
+                    "org.nabucco.aspect.transitioning", "org.nabucco.aspect.relating", "org.nabucco.aspect.resolving",
+                    "org.nabucco.aspect.constraining", "org.nabucco.aspect.historization" });
         }
         String[] aspects = ASPECTS.get(operationName);
         if ((aspects == null)) {
@@ -107,6 +119,20 @@ public class MaintainSchedulingImpl extends ServiceSupport implements MaintainSc
         this.maintainSchedulingServiceHandler.init();
         rs = this.maintainSchedulingServiceHandler.invoke(rq);
         this.maintainSchedulingServiceHandler.finish();
+        return rs;
+    }
+
+    @Override
+    public ServiceResponse<SchedulingListMsg> maintainSchedulingList(ServiceRequest<SchedulingListMsg> rq)
+            throws MaintainException {
+        if ((this.maintainSchedulingListServiceHandler == null)) {
+            super.getLogger().error("No service implementation configured for maintainSchedulingList().");
+            throw new InjectionException("No service implementation configured for maintainSchedulingList().");
+        }
+        ServiceResponse<SchedulingListMsg> rs;
+        this.maintainSchedulingListServiceHandler.init();
+        rs = this.maintainSchedulingListServiceHandler.invoke(rq);
+        this.maintainSchedulingListServiceHandler.finish();
         return rs;
     }
 

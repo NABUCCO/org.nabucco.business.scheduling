@@ -17,6 +17,7 @@
 package org.nabucco.business.scheduling.facade.component;
 
 import org.nabucco.business.scheduling.facade.datatype.Scheduling;
+import org.nabucco.business.scheduling.facade.datatype.SchedulingHistory;
 import org.nabucco.business.scheduling.facade.datatype.Staffing;
 import org.nabucco.business.scheduling.facade.service.maintain.MaintainScheduling;
 import org.nabucco.business.scheduling.facade.service.produce.ProduceScheduling;
@@ -34,6 +35,9 @@ public Component SchedulingComponent {
 	@Referenceable
 	@Description		The list of persistent schedulings.
 	public persistent Datatype Scheduling[0..*] schedulingList;
+
+	@Description		The history of the scheduling changes
+	public persistent Datatype SchedulingHistory[0..*] schedulingHistoryList;
 
 	@Description		The list of persistent staffings.
 	public persistent Datatype Staffing[0..*] staffingList;

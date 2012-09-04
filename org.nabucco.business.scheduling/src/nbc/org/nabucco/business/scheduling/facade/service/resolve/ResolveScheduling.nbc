@@ -30,12 +30,15 @@ public Service ResolveScheduling {
 	@JoinPoint				org.nabucco.aspect.resolving
 	@JoinPoint				org.nabucco.aspect.transitioning
 	@JoinPoint				org.nabucco.aspect.constraining
+	@JoinPoint				org.nabucco.aspect.historization
 	@Description			Resolves a single scheduling.
 	@ManualImplementation
 	public SchedulingMsg resolveScheduling(SchedulingMsg msg) throws ResolveException;
 
 	@JoinPoint				org.nabucco.aspect.resolving
 	@JoinPoint				org.nabucco.aspect.transitioning
+	@JoinPoint				org.nabucco.aspect.constraining
+	@JoinPoint				org.nabucco.aspect.historization
 	@Description			Resolves a single staffing.
 	@ManualImplementation
 	public StaffingMsg resolveStaffing(StaffingMsg msg) throws ResolveException;

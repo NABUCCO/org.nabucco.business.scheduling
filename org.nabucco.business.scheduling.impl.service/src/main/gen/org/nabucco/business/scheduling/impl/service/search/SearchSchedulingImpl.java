@@ -1,18 +1,16 @@
 /*
  * Copyright 2012 PRODYNA AG
- *
- * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
  * http://www.opensource.org/licenses/eclipse-1.0.php or
  * http://www.nabucco.org/License.html
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.business.scheduling.impl.service.search;
 
@@ -21,7 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import org.nabucco.business.scheduling.facade.message.SchedulingListMsg;
+import org.nabucco.business.scheduling.facade.message.SchedulingMsg;
 import org.nabucco.business.scheduling.facade.message.StaffingListMsg;
+import org.nabucco.business.scheduling.facade.message.search.SchedulingByStaffingSearchRq;
 import org.nabucco.business.scheduling.facade.message.search.SchedulingSearchRq;
 import org.nabucco.business.scheduling.facade.message.search.StaffingSearchRq;
 import org.nabucco.business.scheduling.facade.service.search.SearchScheduling;
@@ -50,6 +50,8 @@ public class SearchSchedulingImpl extends ServiceSupport implements SearchSchedu
 
     private SearchSchedulingServiceHandler searchSchedulingServiceHandler;
 
+    private SearchSchedulingByStaffingServiceHandler searchSchedulingByStaffingServiceHandler;
+
     private SearchStaffingServiceHandler searchStaffingServiceHandler;
 
     private EntityManager entityManager;
@@ -70,6 +72,12 @@ public class SearchSchedulingImpl extends ServiceSupport implements SearchSchedu
             this.searchSchedulingServiceHandler.setPersistenceManager(persistenceManager);
             this.searchSchedulingServiceHandler.setLogger(super.getLogger());
         }
+        this.searchSchedulingByStaffingServiceHandler = injector.inject(SearchSchedulingByStaffingServiceHandler
+                .getId());
+        if ((this.searchSchedulingByStaffingServiceHandler != null)) {
+            this.searchSchedulingByStaffingServiceHandler.setPersistenceManager(persistenceManager);
+            this.searchSchedulingByStaffingServiceHandler.setLogger(super.getLogger());
+        }
         this.searchStaffingServiceHandler = injector.inject(SearchStaffingServiceHandler.getId());
         if ((this.searchStaffingServiceHandler != null)) {
             this.searchStaffingServiceHandler.setPersistenceManager(persistenceManager);
@@ -87,6 +95,7 @@ public class SearchSchedulingImpl extends ServiceSupport implements SearchSchedu
         if ((ASPECTS == null)) {
             ASPECTS = new HashMap<String, String[]>();
             ASPECTS.put("searchScheduling", new String[] { "org.nabucco.aspect.resolving" });
+            ASPECTS.put("searchSchedulingByStaffing", new String[] { "org.nabucco.aspect.resolving" });
             ASPECTS.put("searchStaffing", new String[] { "org.nabucco.aspect.resolving" });
         }
         String[] aspects = ASPECTS.get(operationName);
@@ -107,6 +116,20 @@ public class SearchSchedulingImpl extends ServiceSupport implements SearchSchedu
         this.searchSchedulingServiceHandler.init();
         rs = this.searchSchedulingServiceHandler.invoke(rq);
         this.searchSchedulingServiceHandler.finish();
+        return rs;
+    }
+
+    @Override
+    public ServiceResponse<SchedulingMsg> searchSchedulingByStaffing(ServiceRequest<SchedulingByStaffingSearchRq> rq)
+            throws SearchException {
+        if ((this.searchSchedulingByStaffingServiceHandler == null)) {
+            super.getLogger().error("No service implementation configured for searchSchedulingByStaffing().");
+            throw new InjectionException("No service implementation configured for searchSchedulingByStaffing().");
+        }
+        ServiceResponse<SchedulingMsg> rs;
+        this.searchSchedulingByStaffingServiceHandler.init();
+        rs = this.searchSchedulingByStaffingServiceHandler.invoke(rq);
+        this.searchSchedulingByStaffingServiceHandler.finish();
         return rs;
     }
 

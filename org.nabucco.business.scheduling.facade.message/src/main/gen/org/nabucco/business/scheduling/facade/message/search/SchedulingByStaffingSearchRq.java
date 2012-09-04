@@ -12,46 +12,41 @@
  * either express or implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package org.nabucco.business.scheduling.facade.message.produce;
+package org.nabucco.business.scheduling.facade.message.search;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.Owner;
+import org.nabucco.business.scheduling.facade.datatype.Staffing;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
 import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
 import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 
 /**
- * SchedulingPrototypeRq<p/>Prototype for producing a new scheduling.<p/>
+ * SchedulingByStaffingSearchRq<p/>Search for a Scheduling according on given staffing<p/>
  *
  * @version 1.0
- * @author Nicolas Moser, PRODYNA AG, 2011-08-23
+ * @author Leonid Agranovskiy, PRODYNA AG, 2011-08-23
  */
-public class SchedulingPrototypeRq extends ServiceMessageSupport implements ServiceMessage {
+public class SchedulingByStaffingSearchRq extends ServiceMessageSupport implements ServiceMessage {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;u0,n;m0,1;", "l3,12;u0,n;m1,1;" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;" };
 
-    public static final String NAME = "name";
+    public static final String RELATEDSTAFFING = "relatedStaffing";
 
-    public static final String OWNER = "owner";
+    /** The staffing summary. */
+    private Staffing relatedStaffing;
 
-    /** Name of the new scheduling. */
-    private Name name;
-
-    /** Owner of the new scheduling. */
-    private Owner owner;
-
-    /** Constructs a new SchedulingPrototypeRq instance. */
-    public SchedulingPrototypeRq() {
+    /** Constructs a new SchedulingByStaffingSearchRq instance. */
+    public SchedulingByStaffingSearchRq() {
         super();
         this.initDefaults();
     }
@@ -67,10 +62,8 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
      */
     protected static NabuccoPropertyContainer createPropertyContainer() {
         Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
-        propertyMap.put(NAME,
-                PropertyDescriptorSupport.createBasetype(NAME, Name.class, 0, PROPERTY_CONSTRAINTS[0], false));
-        propertyMap.put(OWNER,
-                PropertyDescriptorSupport.createBasetype(OWNER, Owner.class, 1, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(RELATEDSTAFFING, PropertyDescriptorSupport.createDatatype(RELATEDSTAFFING, Staffing.class, 0,
+                PROPERTY_CONSTRAINTS[0], false, PropertyAssociationType.COMPOSITION));
         return new NabuccoPropertyContainer(propertyMap);
     }
 
@@ -82,8 +75,8 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
     @Override
     public Set<NabuccoProperty> getProperties() {
         Set<NabuccoProperty> properties = super.getProperties();
-        properties.add(super.createProperty(SchedulingPrototypeRq.getPropertyDescriptor(NAME), this.name));
-        properties.add(super.createProperty(SchedulingPrototypeRq.getPropertyDescriptor(OWNER), this.owner));
+        properties.add(super.createProperty(SchedulingByStaffingSearchRq.getPropertyDescriptor(RELATEDSTAFFING),
+                this.getRelatedStaffing()));
         return properties;
     }
 
@@ -92,11 +85,8 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
         if (super.setProperty(property)) {
             return true;
         }
-        if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
-            this.setName(((Name) property.getInstance()));
-            return true;
-        } else if ((property.getName().equals(OWNER) && (property.getType() == Owner.class))) {
-            this.setOwner(((Owner) property.getInstance()));
+        if ((property.getName().equals(RELATEDSTAFFING) && (property.getType() == Staffing.class))) {
+            this.setRelatedStaffing(((Staffing) property.getInstance()));
             return true;
         }
         return false;
@@ -116,16 +106,11 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
         if ((!super.equals(obj))) {
             return false;
         }
-        final SchedulingPrototypeRq other = ((SchedulingPrototypeRq) obj);
-        if ((this.name == null)) {
-            if ((other.name != null))
+        final SchedulingByStaffingSearchRq other = ((SchedulingByStaffingSearchRq) obj);
+        if ((this.relatedStaffing == null)) {
+            if ((other.relatedStaffing != null))
                 return false;
-        } else if ((!this.name.equals(other.name)))
-            return false;
-        if ((this.owner == null)) {
-            if ((other.owner != null))
-                return false;
-        } else if ((!this.owner.equals(other.owner)))
+        } else if ((!this.relatedStaffing.equals(other.relatedStaffing)))
             return false;
         return true;
     }
@@ -134,8 +119,7 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
     public int hashCode() {
         final int PRIME = 31;
         int result = super.hashCode();
-        result = ((PRIME * result) + ((this.name == null) ? 0 : this.name.hashCode()));
-        result = ((PRIME * result) + ((this.owner == null) ? 0 : this.owner.hashCode()));
+        result = ((PRIME * result) + ((this.relatedStaffing == null) ? 0 : this.relatedStaffing.hashCode()));
         return result;
     }
 
@@ -145,39 +129,21 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
     }
 
     /**
-     * Name of the new scheduling.
+     * The staffing summary.
      *
-     * @return the Name.
+     * @return the Staffing.
      */
-    public Name getName() {
-        return this.name;
+    public Staffing getRelatedStaffing() {
+        return this.relatedStaffing;
     }
 
     /**
-     * Name of the new scheduling.
+     * The staffing summary.
      *
-     * @param name the Name.
+     * @param relatedStaffing the Staffing.
      */
-    public void setName(Name name) {
-        this.name = name;
-    }
-
-    /**
-     * Owner of the new scheduling.
-     *
-     * @return the Owner.
-     */
-    public Owner getOwner() {
-        return this.owner;
-    }
-
-    /**
-     * Owner of the new scheduling.
-     *
-     * @param owner the Owner.
-     */
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setRelatedStaffing(Staffing relatedStaffing) {
+        this.relatedStaffing = relatedStaffing;
     }
 
     /**
@@ -187,7 +153,7 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
      * @return the NabuccoPropertyDescriptor.
      */
     public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
-        return PropertyCache.getInstance().retrieve(SchedulingPrototypeRq.class).getProperty(propertyName);
+        return PropertyCache.getInstance().retrieve(SchedulingByStaffingSearchRq.class).getProperty(propertyName);
     }
 
     /**
@@ -196,6 +162,6 @@ public class SchedulingPrototypeRq extends ServiceMessageSupport implements Serv
      * @return the List<NabuccoPropertyDescriptor>.
      */
     public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
-        return PropertyCache.getInstance().retrieve(SchedulingPrototypeRq.class).getAllProperties();
+        return PropertyCache.getInstance().retrieve(SchedulingByStaffingSearchRq.class).getAllProperties();
     }
 }
